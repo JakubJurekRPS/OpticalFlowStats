@@ -1,0 +1,20 @@
+[
+    {
+        "StatName": "HoA",
+        "config": 
+        [
+            {"numOfBins": 10}
+        ]
+        
+    },
+    {
+        "StatName": "HoA",
+        "config":
+        [
+            {"numOfBins": 5}
+        ]
+    },
+    {
+        "StatName": "MADiv"
+    }
+]

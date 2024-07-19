@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+
+# VS Code specific
+*.code-workspace
+# .vscode
+
+# CUDA profiler reports
+*.ncu-rep
+
+# Build artifacts dirs
+build*
+
+#run results
+statResults*

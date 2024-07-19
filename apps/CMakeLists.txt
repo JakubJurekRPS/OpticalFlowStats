@@ -1,0 +1,4 @@
+add_executable(FlowAnalyzer flow_analyzer.cpp)
+target_compile_features(FlowAnalyzer PUBLIC cxx_std_20)
+
+target_link_libraries(FlowAnalyzer PRIVATE ofs)
