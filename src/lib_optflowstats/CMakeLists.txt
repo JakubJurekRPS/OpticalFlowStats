@@ -52,7 +52,7 @@ endif()
 target_link_libraries(ofs   PUBLIC sc
                             PUBLIC ${OpenCV_LIBS})
 
-# TODO: unit tests
+
 if(BUILD_TESTING)
     add_subdirectory(tests)
     enable_testing()

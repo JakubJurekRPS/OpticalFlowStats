@@ -8,16 +8,16 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(utests utests.cpp)
+add_executable(utests_optflowstats utests.cpp)
 
-target_compile_features(utests PRIVATE cxx_std_14)
+target_compile_features(utests_optflowstats PRIVATE cxx_std_14)
 
-target_link_libraries(utests PRIVATE GTest::gtest_main 
+target_link_libraries(utests_optflowstats PRIVATE GTest::gtest_main 
                              PRIVATE ofs)
 
 include(GoogleTest)
-gtest_discover_tests(utests)
+gtest_discover_tests(utests_optflowstats)
 
 enable_testing()
 
-add_test(NAME StatsCalculation COMMAND utests)
+add_test(NAME StatsCalculation COMMAND utests_optflowstats)

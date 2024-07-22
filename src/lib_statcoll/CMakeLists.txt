@@ -12,4 +12,7 @@ FetchContent_MakeAvailable(json)
 
 target_link_libraries(sc INTERFACE nlohmann_json::nlohmann_json)
 
-# TODO: unit tests
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+    enable_testing()
+endif()

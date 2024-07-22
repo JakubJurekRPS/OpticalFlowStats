@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include "optflowstats/predefstats.hpp"
 
+// TODO: other tests
 auto getTestFlow()
 {
     cv::Mat flow(600, 600, CV_32FC2);
@@ -23,14 +24,14 @@ auto getTestFlow()
     return testFlow;
 }
 
-TEST(StatsCalculation, MADiv)
+TEST(MADiv, sum)
 {
     ofs::CalcMADiv calcMADiv;
     auto madiv = calcMADiv(getTestFlow());
     EXPECT_EQ(madiv.val, 2.0);
 }
 
-TEST(StatsCalculation, HoA)
+TEST(HoA, sum)
 {
     ofs::CalcHoA calcHoA(10);
     auto testFlow = getTestFlow();
