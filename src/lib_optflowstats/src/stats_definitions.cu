@@ -1,61 +1,12 @@
-/* Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *  * Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  * Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *  * Neither the name of NVIDIA CORPORATION nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-/**
- * Vector addition: C = A + B.
- *
- * This sample is a very basic sample that implements element by element
- * vector addition. It is the same as the sample illustrating Chapter 2
- * of the programming guide with some additions like error checking.
- */
-
-#include <stdio.h>
-
-#include <vector>
-// For the CUDA runtime routines (prefixed with "cuda_")
 #include <cuda_runtime.h>
-// #include <exception>
 #include "helper_cuda.h"
 #include "stats_definitions.hpp"
 #include <cmath>
-// #include <cuda_profiler_api.h>
-// #include <cooperative_groups.h>
-// #include <cuda_runtime_api.h>
-#include <iostream>
 #include <chrono>
-/**
- * CUDA Kernel Device code
- *
- * Computes the vector addition of A and B into C. The 3 vectors have the same
- * number of elements numElements.
- */
-// namespace cg = cooperative_groups;
+
 #define WARP_SIZE 32
 
+// TODO: check possibiities for kernels optimisation
 // TODO: check if it is possible to avoid bank conflicts
 namespace ofs_detail
 {
@@ -350,7 +301,8 @@ MADiv calc_mean_abs_divergence(const Mat & flow)
   k_abs_div_calc_reduce_part<<<blockDim, childBlockDim, shMemSize>>>(flow, d_divMat);
   checkCudaErrors(cudaDeviceSynchronize());
 
-  // TODO: size of shared memory can be made a half of curr or even less using warp shuffle
+  // TODO: size of shared memory can be lowered at least by a half
+  //  using warp shuffle and performing first step of reduction and reading global memoru in the same thread 
   k_abs_divergence_reduce<<<1, blockDim, blockDim.x * blockDim.y * sizeof(float)>>>(d_divMat);
   checkCudaErrors(cudaGetLastError());
 

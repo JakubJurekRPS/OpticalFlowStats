@@ -22,7 +22,6 @@ using namespace cv;
 using namespace cv::cuda;
 
 constexpr auto configFile = "config.json";
-// constexpr auto videoFile = "/home1/video/Ylambda-065_P-250-10_sloma-palnik60150.avi";
 
 void drawOptFlowMap(const cv::Mat& flow, cv::Mat& cflowmap, int step, double, const Scalar& color)
 {

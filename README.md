@@ -1,31 +1,34 @@
-# OpticalFlowStats
+# OpticalFlowStats (UNFINISHED demo)
 
+
+The objective is calculation of dense optical flow of a given video and then its statistics. 
+The idea came up from my master thesis which objective was to check some posibilities
+of differentiating turbulent flows basing on relatively simple statistics. Example of such flows
+are ones obtained from videos from combustion chamber interiors, where combution processes with
+different air-fuel ratio can be observed.
+
+Some statistics have been already defined. Once a new statitic is defined 
+it's easy to add it to the Collector class object. Collector creates collections automatically
+which can be then saved to files.
+
+Statistics to be defined (among others):
+velocity variance, turbulence intensity, curl statistics, max velocity, max divergence, max curl,
+mean number of divergence/curl sign changes in vertical and horizontal direction,
+histogram of angles with magnitude(velocity - taken as the length of a vector),
+histogram of velocity.
+
+Configurations for statistics to be created and calculated are provided to Collector in config.json
 # TODOs:
 
+Add documentation!
 Use streams to enable simultaneous collecting and printing/writing results to files
 
-└─ OpticalFlowStats
-   ├─ flow_analyzer.cpp
-   │  └─ line 67: TODO : CUDA optical flow calculation
-   ├─ predefstats.cpp
-   │  └─ line 29: TODO : Implement CalcHoV operator()
-   ├─ stats_definitions.cu
-   │  ├─ line 9: TODO : check if it is possible to avoid bank conflicts
-   │  ├─ line 109: TODO : use shared memory and warp shuffle
-   │  └─ line 303: TODO : size of shared memory can be made a half of curr or even less using warp shuffle
-   ├─ utests.cpp
-   │  └─ line 7: TODO : other tests
-   ├─ collector.hpp
-   │  ├─ line 67: TODO : Default constructible functors?
-   │  ├─ line 68: TODO : Other concepts for Collector template types
-   │  └─ line 80: TODO : Use variant and get() instead of unique_ptrs. It's not worth to use pointers as accelaration is tiny
-   └─ ut_collector.hpp
-      └─ line 4: TODO : unit test for Collector
+The rest of TODOs are in todo-tree.txt
 
 # Build options:
-  -DUSE_GPU
+  ## -DUSE_GPU
       Use cuda-defined statistics equivalents
-  -DBUILD_TESTING
+  ## -DBUILD_TESTING
       Build unit tests
 
 # Testing

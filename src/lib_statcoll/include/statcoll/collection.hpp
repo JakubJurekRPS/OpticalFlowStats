@@ -28,8 +28,6 @@ namespace sc
         auto getDescription() const { return mDescription_; }
         auto getId() const { return mId_; }
     };
-
-// TODO: batch, name and stat info
 } // namespace sc
 
 #endif // OFS_COLLECTION2_HPP

@@ -26,7 +26,7 @@ unique_ptr<FunctorBase> CalcHoA::create(hsize_t numOfBins)
     return make_unique<CalcHoA>(numOfBins);
 }
 
-// TODO: Implement this
+// TODO: Implement CalcHoV operator()
 CalcHoV::CalcHoV(hsize_t numOfBins): mNumOfBins_{checkNumOfBins(numOfBins)} {}
 HoV CalcHoV::operator()(const Mat & src)
 {

@@ -77,7 +77,7 @@ class Collector
     using call_op_res_t = mbr_fn_res_t<decltype(&T::operator())>;
 
     using Tinp = mbr_fn_arg_t<0, decltype(&nth_type<0, Ts...>::operator())>;
-// TODO: consider using variant and get() instead of unique_ptrs
+// TODO: Use variant and get() instead of unique_ptrs. It's not worth to use pointers as accelaration is tiny
     using CollVariant = unique_types<Tcollection<call_op_res_t<Ts>>...>::variant_t;
     using FunctorArray = array<vector<unique_ptr<FunctorBase>>, sizeof...(Ts)>;
     using CollectionArray = array<vector<unique_ptr<CollectionBase>>, sizeof...(Ts)>;

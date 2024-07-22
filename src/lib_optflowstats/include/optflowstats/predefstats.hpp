@@ -64,7 +64,7 @@ public:
     static unique_ptr<FunctorBase> create(hsize_t numOfBins);
 };
 
-// TODO: Implement this
+
 class CalcHoV: public FunctorBase, public CheckHistParams
 {
     hsize_t mNumOfBins_;
