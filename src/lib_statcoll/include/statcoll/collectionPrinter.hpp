@@ -45,7 +45,7 @@ concept WithValMember = requires(T t, ostream &os)
 
 class JsonPrinter
 {
-    void printInfo( auto & collection)
+    void printInfo(const auto & collection)
     {
         mOutputStream_ << "  " << R"("info":)" << endl;
         mOutputStream_ << "  " << R"({)" << endl;
@@ -56,12 +56,13 @@ class JsonPrinter
         mOutputStream_ << "    " <<R"("id": )"  << collection.getId()  << endl;
         mOutputStream_ << "  " << R"(},)" << endl;
     }
+
     ostream &mOutputStream_;
 public:
     JsonPrinter(ostream &outputStream) : mOutputStream_(outputStream) {}
     template <StreamableByIter ElemT, template<typename> typename Tcollection> 
         requires Iterable<Tcollection<ElemT>>
-    void operator()( Tcollection<ElemT> &collection) 
+    void operator()(const Tcollection<ElemT> &collection) 
     {
         mOutputStream_  << R"({)"<< endl;
         printInfo(collection);
@@ -75,14 +76,13 @@ public:
             }
             
             mOutputStream_ << "    " << valArray << ((&elem == &collection.back()) ? "" : ",") << endl;
-            // elemArray.
         }
         mOutputStream_ << "  " << R"(])" << endl << R"(})" << endl;
     }
 
     template <WithValMember ElemT, template<typename> typename Tcollection>
         requires Iterable<Tcollection<ElemT>>
-    void operator()( Tcollection<ElemT> &collection) 
+    void operator()(const Tcollection<ElemT> &collection) 
     {
         mOutputStream_  << R"({)"<< endl;
         printInfo(collection);
@@ -98,7 +98,7 @@ public:
 
     template <Streamable ElemT, template<typename> typename Tcollection>
         requires Iterable<Tcollection<ElemT>>
-    void operator()( Tcollection<ElemT> &collection) 
+    void operator()(const Tcollection<ElemT> &collection) 
     {
         mOutputStream_  << R"({)"<< endl;
         printInfo(collection);
@@ -118,7 +118,7 @@ template <typename Tprinter>
 class FilePrinter
 {
 public:
-    void operator()(auto &collection)
+    void operator()(const auto &collection)
     {
         string resDir = "statResults/" + collection.getBatch() + "/";
         create_directories(resDir);
