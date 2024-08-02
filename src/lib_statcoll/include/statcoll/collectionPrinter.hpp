@@ -7,8 +7,11 @@
 #include "memory"
 #include <fstream>
 #include <filesystem>
+
+
 namespace sc
 {
+
 using std::ostream;
 using nlohmann::json;
 using std::unique_ptr;
@@ -25,22 +28,22 @@ concept Iterable = requires(T t)
 };
 
 template <typename T>
-concept StreamableByIter = Iterable<T> && requires(T t, ostream &os) 
-{
-    { os << *t.begin()};
-};
-
-template <typename T>
-concept Streamable = requires(T t, ostream &os) 
-{
-    { os << t};
-};
-
-template <typename T>
-concept WithValMember = requires(T t, ostream &os) 
+concept WithValMember = requires(T t, ostream &os)
 {
     {t.val};
-    { os << t.val};
+    requires std::is_scalar<decltype(t.val)>::value;
+};
+
+template <WithValMember ElemT>
+void to_json(json &j, const ElemT &elem)
+{
+    j = elem.val;
+}
+
+template <typename T>
+concept PushableToJsonArray = requires(T t, json::array_t j) 
+{
+    { j.push_back(t) };
 };
 
 class JsonPrinter
@@ -60,8 +63,11 @@ class JsonPrinter
     ostream &mOutputStream_;
 public:
     JsonPrinter(ostream &outputStream) : mOutputStream_(outputStream) {}
-    template <StreamableByIter ElemT, template<typename> typename Tcollection> 
+
+    template <typename ElemT, template<typename> typename Tcollection> 
         requires Iterable<Tcollection<ElemT>>
+            && Iterable<ElemT>
+            && PushableToJsonArray<ElemT>
     void operator()(const Tcollection<ElemT> &collection) 
     {
         mOutputStream_  << R"({)"<< endl;
@@ -70,18 +76,20 @@ public:
         for (const auto &elem : collection)
         {
             json::array_t valArray;
-            for(const auto val : elem)
+            valArray.reserve(elem.size());
+            for(const auto &val : elem)
             {
                 valArray.push_back(val);
             }
-            
             mOutputStream_ << "    " << valArray << ((&elem == &collection.back()) ? "" : ",") << endl;
         }
         mOutputStream_ << "  " << R"(])" << endl << R"(})" << endl;
     }
 
-    template <WithValMember ElemT, template<typename> typename Tcollection>
+    template <typename ElemT, template<typename> typename Tcollection>
         requires Iterable<Tcollection<ElemT>>
+            && PushableToJsonArray<ElemT>
+            && (!Iterable<ElemT>)
     void operator()(const Tcollection<ElemT> &collection) 
     {
         mOutputStream_  << R"({)"<< endl;
@@ -91,23 +99,7 @@ public:
         valArray.reserve(collection.size());
         for ( auto &elem : collection)
         {
-            valArray.emplace_back(elem.val);
-        }
-        mOutputStream_ << std::setprecision(4) << valArray << endl << R"(})" << endl;
-    }
-
-    template <Streamable ElemT, template<typename> typename Tcollection>
-        requires Iterable<Tcollection<ElemT>>
-    void operator()(const Tcollection<ElemT> &collection) 
-    {
-        mOutputStream_  << R"({)"<< endl;
-        printInfo(collection);
-        mOutputStream_ << "  " << R"("data":)" << endl << "  ";
-        json::array_t valArray;
-        valArray.reserve(collection.size());
-        for ( auto &elem : collection)
-        {
-            valArray.emplace_back(elem);
+            valArray.push_back(elem);
         }
         mOutputStream_ << valArray << endl << R"(})" << endl;
     }
@@ -129,7 +121,6 @@ public:
     }
     
 };
-
 
 } // namespace sc
 
