@@ -69,12 +69,7 @@ public:
         mOutputStream_ << "  " << R"("data":)" << endl << "  " <<  R"([)" << endl;
         for (const auto &elem : collection)
         {
-            json::array_t valArray;
-            for(const auto val : elem)
-            {
-                valArray.push_back(val);
-            }
-            
+            json::array_t valArray {elem};
             mOutputStream_ << "    " << valArray << ((&elem == &collection.back()) ? "" : ",") << endl;
         }
         mOutputStream_ << "  " << R"(])" << endl << R"(})" << endl;
