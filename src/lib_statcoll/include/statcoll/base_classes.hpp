@@ -10,11 +10,6 @@ public:
     virtual ~FunctorBase() = default;
 };
 
-class CollectionBase
-{
-public:
-    virtual ~CollectionBase() = default;
-};
 
 } // namespace sc
 

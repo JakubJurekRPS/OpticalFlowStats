@@ -80,7 +80,7 @@ class Collector
 // TODO: Use variant and get() instead of unique_ptrs. It's not worth to use pointers as accelaration is tiny
     using CollVariant = unique_types<Tcollection<call_op_res_t<Ts>>...>::variant_t;
     using FunctorArray = array<vector<unique_ptr<FunctorBase>>, sizeof...(Ts)>;
-    using CollectionArray = array<vector<unique_ptr<CollectionBase>>, sizeof...(Ts)>;
+    using CollectionArray = array<vector<CollVariant>, sizeof...(Ts)>;
     using FunctorFactFn = void(*)(FunctorArray & ,const json &);
     using CollectionFactoryFn = void(*)(CollectionArray &, const string &, const int);
 
@@ -142,11 +142,13 @@ class Collector
         using ObjT = nth_type<N, Ts...>;
         using ElemT = call_op_res_t<ObjT>;
         std::cout << "Creating collection for " << ObjT::getName() << std::endl;
-        collections[N].emplace_back(make_unique<Tcollection<ElemT>>(
-            ObjT::getName(),
-            batch,
-            ObjT::getDescription(),
-            id));
+        collections[N].emplace_back( 
+            Tcollection<ElemT>(
+                ObjT::getName(),
+                batch,
+                ObjT::getDescription(),
+                id)
+            );
     }
 
     template<int N>
@@ -224,7 +226,7 @@ class Collector
         }
         for (int i = 0; i < results.size(); i++)
         {
-            static_cast<Tcollection<ElemT>*>(collections[N][i].get())->emplace_back(results[i].get());
+            std::get<Tcollection<ElemT>>(collections[N][i]).emplace_back(results[i].get());
         }
     }
 
@@ -236,31 +238,6 @@ class Collector
         if constexpr (N>0)
         {
             runEachType<N-1>(input, threads);
-        }
-    }
-
-    template <int N>
-        requires (N < sizeof...(Ts)) && (N >= 0)
-    void getCollections(vector<CollVariant> & colls)
-    {
-        using ObjT = nth_type<N, Ts...>;
-        using ElemT = call_op_res_t<ObjT>;
-        if constexpr (N == 0)
-        {
-            for (auto & coll : mCollections_[N])
-            {
-                colls.emplace_back(std::move(*static_cast<Tcollection<ElemT>*>(coll.release())));
-                // coll = make_unique<Tcollection<ElemT>>(); 
-            }
-        }
-        else
-        {
-            getCollections<N-1>(colls);
-            for (auto & coll : mCollections_[N])
-            {
-                colls.emplace_back(std::move(*static_cast<Tcollection<ElemT>*>(coll.release())));
-                // coll = make_unique<Tcollection<ElemT>>(); 
-            }
         }
     }
 
@@ -314,7 +291,13 @@ public:
     {
         vector<CollVariant> colls;
         colls.reserve(sizeof...(Ts));
-        getCollections<sizeof...(Ts)-1>(colls);
+        for( auto & collvec : mCollections_)
+        {
+            for (auto & coll : collvec)
+            {
+                colls.emplace_back(std::move(coll));
+            }
+        }
         reconfigure(mConfigFile_, false, true);
         return colls;
     }

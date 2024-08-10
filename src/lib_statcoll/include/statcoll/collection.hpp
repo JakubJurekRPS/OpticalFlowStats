@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include "base_classes.hpp"
 
 namespace sc
 {
@@ -13,7 +12,7 @@ namespace sc
     // Base class for all collections too enable homogeneous storage
 
     template <typename ElemT>
-    class Collection: public CollectionBase, public vector<ElemT> 
+    class Collection: public vector<ElemT> 
     {
         string mName_;
         string mBatch_;
