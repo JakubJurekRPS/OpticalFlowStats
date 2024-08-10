@@ -33,7 +33,7 @@ TEST(MADiv, sum)
 
 TEST(HoA, sum)
 {
-    ofs::CalcHoA calcHoA(10);
+    ofs::CalcHoA calcHoA;
     auto testFlow = getTestFlow();
     auto hoa = calcHoA(testFlow);
     EXPECT_EQ(hoa.size(), 10);
