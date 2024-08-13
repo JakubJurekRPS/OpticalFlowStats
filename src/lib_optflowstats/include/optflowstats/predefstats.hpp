@@ -6,7 +6,6 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "statcoll/base_classes.hpp"
 #include "statcoll/statistics_types.hpp"
 
 namespace ofs
@@ -16,7 +15,6 @@ using std::string;
 using std::unique_ptr;
 using std::make_unique;
 using sc::Histogram;
-using sc::FunctorBase;
 using sc::hsize_t;
 
 #ifdef USE_GPU
@@ -50,40 +48,40 @@ public:
     using DescriptiveStat<float>::DescriptiveStat;
 };
 
-
-
-class CalcHoA: public FunctorBase, public CheckHistParams
+class CalcHistConfig
 {
+protected:
     hsize_t mNumOfBins_;
 public:
-    // CalcHoA(): CalcHoA(10) {};
-    CalcHoA(hsize_t numOfBins);
+    CalcHistConfig() : mNumOfBins_{10} {};
+    void config(hsize_t numOfBins) { mNumOfBins_ = numOfBins; }
+};
+
+class CalcHoA: public CalcHistConfig, public CheckHistParams
+{
+public:
+    using CalcHistConfig::CalcHistConfig;
     HoA operator()(const Mat & src);
     static string getName() { return "HoA"; }
     static string getDescription() { return "Histogram of Angles"; }
-    static unique_ptr<FunctorBase> create(hsize_t numOfBins);
 };
 
 
-class CalcHoV: public FunctorBase, public CheckHistParams
+class CalcHoV: protected CalcHistConfig, public CheckHistParams
 {
-    hsize_t mNumOfBins_;
 public:
-    // CalcHoV(): CalcHoV(10) {};
-    CalcHoV(hsize_t numOfBins);
+    using CalcHistConfig::CalcHistConfig;
     HoV operator()(const Mat & src);
     static string getName() { return "HoV"; }
     static string getDescription() { return "Histogram of Velocities"; }
-    static unique_ptr<FunctorBase> create(hsize_t numOfBins);
 };
 
-class CalcMADiv: public FunctorBase
+class CalcMADiv
 {
 public:
     MADiv operator()(const Mat & src);
     static string getName() { return "MADiv"; }
     static string getDescription() { return "Mean absolute divergence"; }
-    static unique_ptr<FunctorBase> create() { return make_unique<CalcMADiv>(); }
 };
 
 } // namespace ofs
