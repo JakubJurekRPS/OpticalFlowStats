@@ -138,7 +138,7 @@ class Collector
             {
                 throw CollectorException("Invalid number of arguments in config file");
             }
-            std::cout << "Creating functor for  " << FunctT::getName();
+            std::cout << "Configuring functor for  " << FunctT::getName();
             if(0 < config.size()) 
             {
                 std::cout << " with params ";
