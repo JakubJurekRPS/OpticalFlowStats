@@ -11,8 +11,6 @@
    ├─ utests.cpp
    │  └─ line 7: TODO : other tests
    ├─ collector.hpp
-   │  ├─ line 67: TODO : Default constructible functors?
    │  ├─ line 68: TODO : Other concepts for Collector template types
-   │  └─ line 80: TODO : Use variant and get() instead of unique_ptrs. It's not worth to use pointers as accelaration is tiny
    └─ ut_collector.hpp
       └─ line 4: TODO : unit test for Collector
