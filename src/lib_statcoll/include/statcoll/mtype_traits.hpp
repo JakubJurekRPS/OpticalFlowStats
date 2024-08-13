@@ -16,7 +16,7 @@ using nth_type = typename tuple_element<N, tuple<Ts...>>::type;
 template<typename Sig>
 struct free_fn_traits;
 
-template<typename R, typename ...Args>
+template<typename R, typename... Args>
 struct free_fn_traits<R(*)(Args...)>
 {
     template <int N>
@@ -43,9 +43,6 @@ using mbr_fn_arg_t = typename mbr_fn_traits<Tfnc>::template arg_type<N>;
 
 template <typename Tfnc>
 using mbr_fn_res_t = typename mbr_fn_traits<Tfnc>::result_type;
-
-template <typename Tfnc>
-using mbr_fn_num_args =  mbr_fn_traits<Tfnc>::num_args();
 
 template<int N, typename Tfnc>
 using free_fn_arg_t = typename free_fn_traits<Tfnc>::template arg_type<N>;
