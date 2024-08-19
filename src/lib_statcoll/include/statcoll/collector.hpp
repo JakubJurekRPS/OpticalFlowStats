@@ -189,6 +189,7 @@ class Collector
         json configs;
         file >> configs;    
         file.close();
+        mNumOfConfigs_ = configs.size();
 
         int collId = 0;
         std::time_t timestamp = time(NULL);
@@ -196,6 +197,7 @@ class Collector
         char output[50];
         strftime(output, 50, "%y-%m-%d_%H-%M-%S", &datetime);
         string batch = string{output};
+
         for (const auto & el : configs)
         {
             json config;
@@ -264,6 +266,7 @@ class Collector
     FunctorArray mFunctors_;
     CollectionArray mCollections_;
     string mConfigFile_;
+    unsigned mNumOfConfigs_;
 public:
     Collector(const string & configFile): mConfigFile_{configFile}
     {
@@ -309,7 +312,7 @@ public:
     auto getCollections()
     {
         vector<CollVariant> colls;
-        colls.reserve(sizeof...(Ts));
+        colls.reserve(mNumOfConfigs_);
         for( auto & collvec : mCollections_)
         {
             for (auto & coll : collvec)

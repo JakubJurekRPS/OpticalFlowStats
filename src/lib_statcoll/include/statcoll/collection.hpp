@@ -9,8 +9,6 @@ namespace sc
     using std::string;
     using std::vector;
 
-    // Base class for all collections too enable homogeneous storage
-
     template <typename ElemT>
     class Collection: public vector<ElemT> 
     {
@@ -21,7 +19,6 @@ namespace sc
     public:
         Collection(const string &name, const string &batch, const string &description, const int id)
             : mName_{name}, mBatch_{batch}, mDescription_{description}, mId_{id} {}
-
         auto getName() const { return mName_; }
         auto getBatch() const { return mBatch_; }
         auto getDescription() const { return mDescription_; }
