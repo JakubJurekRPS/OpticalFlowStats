@@ -114,7 +114,7 @@ public:
     {
         string resDir = "statResults/" + collection.getBatch() + "/";
         create_directories(resDir);
-        string fileName = collection.getName()  + "." + Tprinter::getFileNameExtension();
+        string fileName = collection.getName() + "-" + std::to_string(collection.getId()) + "." + Tprinter::getFileNameExtension();
         ofstream file(resDir + fileName);
         Tprinter printer(file);
         printer(collection);
