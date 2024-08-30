@@ -236,6 +236,7 @@ class Collector
         {
             results.emplace_back(
                 async(
+                    std::launch::async,
                     [&functors](const Tinp & input, int i)
                     {
                         return std::get<FunctT>(functors[N][i])(input);
