@@ -20,4 +20,4 @@ gtest_discover_tests(utests_statcoll)
 
 enable_testing()
 
-add_test(NAME StatsCollection COMMAND utests_statcoll)
+# add_test(NAME StatsCollection COMMAND utests_statcoll)

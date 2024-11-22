@@ -10,5 +10,6 @@ add_subdirectory(apps)
 add_subdirectory(src)
 
 if(BUILD_TESTING)
+    include(CTest)
     enable_testing()
 endif()
