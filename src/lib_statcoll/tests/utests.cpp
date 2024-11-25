@@ -3,7 +3,8 @@
 
 #include <gtest/gtest.h>
 #include "ut_collection.hpp"
-
+#include "ut_collector.hpp"
+#include "ut_statistics_types.hpp"
 // TODO: other tests
 
 
