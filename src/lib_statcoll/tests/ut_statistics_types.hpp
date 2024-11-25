@@ -3,21 +3,21 @@
 
 TEST(Histogram, basic_constructor)
 {
-    sc::Histogram<int> hist(10);
+    sc::Histogram hist(10);
     EXPECT_EQ(10, hist.size());
 }
 
 TEST(Histogram, checkSize)
 {
-    EXPECT_THROW(sc::Histogram<int>(0), std::invalid_argument);
-    EXPECT_THROW(sc::Histogram<int>(1), std::invalid_argument);
-    EXPECT_NO_THROW(sc::Histogram<int>(2));
-    EXPECT_NO_THROW(sc::Histogram<int>(std::numeric_limits<sc::hsize_t>::max()));
+    EXPECT_THROW(sc::Histogram(0), std::invalid_argument);
+    EXPECT_THROW(sc::Histogram(1), std::invalid_argument);
+    EXPECT_NO_THROW(sc::Histogram(2));
+    EXPECT_NO_THROW(sc::Histogram(std::numeric_limits<sc::hsize_t>::max()));
 }
 
 TEST(Histogram, subscript_operator)
 {
-    sc::Histogram<int> hist(10);
+    sc::Histogram hist(10);
 
     int i = 0;
     for(auto & elem : hist)
@@ -33,7 +33,7 @@ TEST(Histogram, subscript_operator)
 // Check  precisely if the meaning of copy operation is fulfilled
 TEST(Histogram, copy_constructor)
 {
-    sc::Histogram<int> hist(10);
+    sc::Histogram hist(10);
     {
         int i = 0;
         for(auto & elem : hist)
@@ -41,7 +41,7 @@ TEST(Histogram, copy_constructor)
             elem = i++;
         }
     }
-    sc::Histogram<int> hist2(hist);
+    sc::Histogram hist2(hist);
 
     EXPECT_NE(hist.begin(), hist2.begin());
     EXPECT_NE(hist.begin(), nullptr);
@@ -62,7 +62,7 @@ TEST(Histogram, copy_constructor)
 // Check  precisely if the meaning of move operation is fulfilled
 TEST(Histogram, move_constructor)
 {
-    sc::Histogram<int> hist(10);
+    sc::Histogram hist(10);
     {
         int i = 0;
         for(auto & elem : hist)
@@ -75,7 +75,7 @@ TEST(Histogram, move_constructor)
     auto h1end = hist.end();
     auto h1size = hist.size();
 
-    sc::Histogram<int> hist2(std::move(hist));
+    sc::Histogram hist2(std::move(hist));
 
     EXPECT_EQ(nullptr, hist.begin());
     EXPECT_EQ(0, hist.size());
@@ -92,8 +92,8 @@ TEST(Histogram, move_constructor)
 
 TEST(Histogram, copy_assignment_operator)
 {
-    sc::Histogram<int> hist(10);
-    sc::Histogram<int> hist2(5);
+    sc::Histogram hist(10);
+    sc::Histogram hist2(5);
     {
         int i = 0;
         for(auto & elem : hist)
@@ -127,8 +127,8 @@ TEST(Histogram, copy_assignment_operator)
 
 TEST(Histogram, move_assignment_operator)
 {
-    sc::Histogram<int> hist(10);
-    sc::Histogram<int> hist2(5);
+    sc::Histogram hist(10);
+    sc::Histogram hist2(5);
     {
         int i = 0;
         for(auto & elem : hist)

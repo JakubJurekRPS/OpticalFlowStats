@@ -4,14 +4,16 @@
 // #include "rawbuf.hpp"
 #include <limits>
 #include <stdexcept>
+#include <concepts>
 
 namespace sc
 {
 
 using std::invalid_argument;
 using hsize_t = unsigned short;
+using std::unsigned_integral;
 
-template <typename T = unsigned>
+template <unsigned_integral T = unsigned>
 class Histogram
 {
     hsize_t checkSize(const int size) const
@@ -33,7 +35,6 @@ public:
     Histogram(const Histogram & other) : mBinsNum_{other.mBinsNum_}, mData_{new T[mBinsNum_]}
     {
         std::copy(other.mData_, other.mData_ + mBinsNum_, mData_);
-        std::cout << "copy constructor" << std::endl;
     }
 
     friend void swap(Histogram & first, Histogram & second) noexcept
@@ -43,18 +44,15 @@ public:
         swap(first.mData_, second.mData_);
     }
     //move constructor
-    Histogram(Histogram&& other) noexcept
+    Histogram(Histogram&& other) noexcept //use std::exchange due to lack of the default constructor
         : mBinsNum_(std::exchange(other.mBinsNum_, 0)),
           mData_(std::exchange(other.mData_, nullptr)) { std::cout << "move constructor" << std::endl; }
 
     //use copy swap idiom to implement copy and move assignment operators
     Histogram & operator=(Histogram other)
     {
-        // TODO: remove the comment below
-        std::cout << "move or copy assignment operator" << std::endl;
         using std::swap;
-        swap(mBinsNum_, other.mBinsNum_);
-        swap(mData_, other.mData_);
+        swap(*this, other);
         return *this;
     }
 
