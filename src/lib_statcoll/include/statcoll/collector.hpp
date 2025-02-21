@@ -131,6 +131,7 @@ class Collector
     {
         using FunctT = nth_type<N, Ts...>;
         FunctT functor;
+        //TODO: change to isConfigurable
         if constexpr (has_config_function<FunctT>::value)
         {
             constexpr auto ObjArgNum = mbr_fn_traits<decltype(&FunctT::config)>::num_args();
